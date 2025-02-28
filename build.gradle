@@ -34,6 +34,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// mariadb
+	implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
 }
 
 tasks.named('test') {
