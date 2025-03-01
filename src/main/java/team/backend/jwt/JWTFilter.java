@@ -33,6 +33,13 @@ public class JWTFilter extends OncePerRequestFilter {
         // 재로그인 무한루프 방지
         String requestUri = request.getRequestURI();
 
+
+        // Swagger UI 및 OpenAPI 문서 경로는 필터를 건너뛰기
+        if (requestUri.startsWith("/swagger-ui") || requestUri.startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response); // Swagger 관련 경로를 필터링에서 제외
+            return;
+        }
+
         if (requestUri.matches("^\\/login(?:\\/.*)?$") || requestUri.matches("^\\/api\\/user\\/tokenVerification(?:\\/.*)?$")) {
 
             filterChain.doFilter(request, response);
