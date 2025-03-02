@@ -33,7 +33,7 @@ public class WishResponseDTO {
         String imageUrl;
     }
 
-    //선물 생성, 수정
+    //선물 생성, 수정, 선물 뽑기
     @Builder
     @Getter
     @NoArgsConstructor
@@ -41,7 +41,7 @@ public class WishResponseDTO {
     public static class CreateWishRsDTO{
         Long id;
         String name;
-        String linK;
+        String link;
         String imageUrl;
     }
 
@@ -55,6 +55,11 @@ public class WishResponseDTO {
     }
 
     //선물 뽑기 메인
-
-    //선물 뽑기
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DrawingResultRsDTO{
+        String eventName;
+    }
 }

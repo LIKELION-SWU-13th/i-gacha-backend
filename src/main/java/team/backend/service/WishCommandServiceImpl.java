@@ -83,4 +83,14 @@ public class WishCommandServiceImpl implements WishCommandService {
         //위시 삭제
         wishRepository.deleteById(wishId);
     }
+
+    //위시 조회
+    @Override
+    @Transactional
+    public void checkEvent(Long userId, Long eventId){
+        boolean isChecked = eventRepository.isUserCreator(userId, eventId);
+        if (!isChecked) {
+            throw new EventHandler(ErrorStatus._USER_NOT_CREATE_EVENT);
+        }
+    }
 }
