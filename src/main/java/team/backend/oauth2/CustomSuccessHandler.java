@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,10 @@ import java.util.Iterator;
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JWTUtil jwtUtil;
+
+    @Value("${frontend.domain}")
+    private String frontendDomain;
+
 
     public CustomSuccessHandler(JWTUtil jwtUtil) {
 
@@ -43,7 +48,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.createJwt(username, role, 60*60*60L);
 
         response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect("http://localhost:3000/login/oauth2/code/google");
+        response.sendRedirect("https://" + frontendDomain + "/login/oauth2/code/google");
         response.setStatus(HttpStatus.OK.value());
     }
 
@@ -51,8 +56,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         Cookie cookie = new Cookie(key, value);
         cookie.setMaxAge(60*60*60);
-        //cookie.setSecure(true);
         cookie.setPath("/");
+        cookie.setDomain(frontendDomain);
         cookie.setHttpOnly(true);
 
         return cookie;
