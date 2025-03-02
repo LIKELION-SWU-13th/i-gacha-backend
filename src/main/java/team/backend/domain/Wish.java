@@ -31,4 +31,18 @@ public class Wish extends BaseEntity {
     @JoinColumn(name="event_id")
     private Event event;
 
+    public void setEvent(Event event){
+        if(this.event != null)
+            event.getWishList().remove(this);
+        this.event = event;
+        event.getWishList().add(this);
+    }
+
+    public Wish update(String name, String link, String imageUrl) {
+        if (name != null) this.name = name;
+        if (link != null) this.link = link;
+        if (imageUrl != null) this.imageUrl = imageUrl;
+        return this;
+    }
+
 }

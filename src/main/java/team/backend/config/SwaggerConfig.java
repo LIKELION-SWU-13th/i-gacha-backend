@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI TestAPI() {
+    public OpenAPI UMCstudyAPI() {
         Info info = new Info()
-                .title("Server API")
-                .description("멋사 토이플젝 Server test API")
+                .title("UMC Server WorkBook API")
+                .description("UMC Server WorkBook API 명세서")
                 .version("1.0.0");
 
         String jwtSchemeName = "JWT TOKEN";
