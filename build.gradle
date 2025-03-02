@@ -37,6 +37,17 @@ dependencies {
 
 	// mariadb
 	implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// oauth2-client
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

@@ -1,7 +1,7 @@
 package team.backend.service;
 
 import org.springframework.stereotype.Service;
-import team.backend.apiPayload.code.EventDto;
+import team.backend.dto.EventDto;
 import team.backend.domain.Event;
 import team.backend.repository.EventRepository;
 import team.backend.apiPayload.exception.EventNotFoundException;

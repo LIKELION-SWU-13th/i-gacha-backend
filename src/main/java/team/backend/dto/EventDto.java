@@ -1,4 +1,4 @@
-package team.backend.apiPayload.code;
+package team.backend.dto;
 
 import lombok.Getter;
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Getter @Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
@@ -26,6 +26,12 @@ public class User{
 
     @Column(nullable = false, length = 50)
     private String password;
+
+    @Column(nullable = false, length = 50)
+    private String role;
+
+    @Column(nullable = false, length = 50)
+    private String name;
 
     //소셜 로그인 타입
     //@Enumerated(EnumType.STRING)

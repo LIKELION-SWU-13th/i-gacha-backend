@@ -3,7 +3,7 @@ package team.backend.Controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.backend.apiPayload.code.EventDto;
+import team.backend.dto.EventDto;
 import team.backend.service.EventService;
 
 import java.util.List;
