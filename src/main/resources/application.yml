@@ -24,3 +24,6 @@ spring:
     include:
       - database
       - oauth2
+
+frontend:
+  domain: ${FRONT_DOMAIN}

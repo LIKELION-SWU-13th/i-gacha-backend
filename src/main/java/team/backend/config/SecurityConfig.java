@@ -2,6 +2,7 @@ package team.backend.config;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,9 @@ public class SecurityConfig {
     private final CustomSuccessHandler customSuccessHandler;
     private final JWTUtil jwtUtil;
 
+    @Value("${frontend.domain}")  // application.yml에서 정의한 URL 값 읽기
+    private String frontendDomain;
+
     public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler, JWTUtil jwtUtil) {
 
         this.customOAuth2UserService = customOAuth2UserService;
@@ -46,7 +50,7 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedOrigins(Collections.singletonList("https://" + frontendDomain));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));

@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,6 +21,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Value("${frontend.domain}")  // application.yml에서 정의한 URL 값 읽기
+    private String frontendDomain;
 
     @GetMapping("/tokenVerification")
     public ResponseEntity<String> getProtectedData(HttpServletRequest request, HttpServletResponse response) {
@@ -67,6 +70,7 @@ public class UserController {
         cookie.setMaxAge(0); // 쿠키 즉시 삭제
         cookie.setPath("/");  // 모든 경로에서 삭제
         cookie.setHttpOnly(true); // HttpOnly 설정
+        cookie.setDomain(frontendDomain);
         response.addCookie(cookie);
     }
 }
