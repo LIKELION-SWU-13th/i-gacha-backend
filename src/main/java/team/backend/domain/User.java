@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import team.backend.domain.common.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +37,10 @@ public class User{
     //@Enumerated(EnumType.STRING)
     //@Column(columnDefinition = "VARCHAR(10)")
     //private SocialType socialType
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Event> eventList = new ArrayList<>();
