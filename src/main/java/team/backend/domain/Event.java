@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import team.backend.domain.common.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Setter
 public class Event extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,22 @@ public class Event extends BaseEntity {
     @JoinColumn(name="user_id")
     private User user;
 
+    @Column(nullable = false)
+    private LocalDateTime startDate;
+
+    @Column(nullable = false)
+    private LocalDateTime endDate;
+
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Wish> wishList = new ArrayList<>();
+
+    public Event(Long userId, String name, LocalDateTime startDate, LocalDateTime endDate) {
+        this.user = new User(userId);
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+
 
 }
