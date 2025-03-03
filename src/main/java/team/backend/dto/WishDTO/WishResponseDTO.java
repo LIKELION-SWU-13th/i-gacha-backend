@@ -62,4 +62,14 @@ public class WishResponseDTO {
     public static class DrawingResultRsDTO{
         String eventName;
     }
+
+    //크롤링
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WishDto{
+        String title;
+        String imageUrl;
+    }
 }

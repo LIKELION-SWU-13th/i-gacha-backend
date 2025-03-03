@@ -21,11 +21,11 @@ public class WishConverter {
     }
 
     //위시 생성
-    public static Wish toWish(WishRequestDTO.CreateRqDTO request){
+    public static Wish toWish(WishRequestDTO.CreateRqDTO request, WishResponseDTO.WishDto crawData){
         return Wish.builder()
-                .name(request.getLink())//임의값입니다.. 크롤링한 결과들 들어가야됨
+                .name(crawData.getTitle())//임의값입니다.. 크롤링한 결과들 들어가야됨
                 .link(request.getLink())
-                .imageUrl(request.getLink())
+                .imageUrl(crawData.getImageUrl())
                 .build();
     }
 
