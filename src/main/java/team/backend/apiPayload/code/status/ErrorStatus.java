@@ -15,6 +15,13 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"COMMON401","인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
 
+    // 이벤트 오류
+    _USER_NOT_CREATE_EVENT(HttpStatus.BAD_REQUEST, "EVENT401", "해당 사용자는 해당 이벤트를 생성하지 않았습니다."),
+    _USER_EVENT_WISH(HttpStatus.BAD_REQUEST, "EVENT402", "사용자 ID, 이벤트 ID, 위시 ID 설정 오류"),
+    _EVENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "EVENT403", "해당 이벤트가 존재하지 않습니다."),
+    _EVENT_WISH_NOT_EXIST(HttpStatus.BAD_REQUEST, "EVENT404", "해당 이벤트에 위시는 존재하지 않습니다."),
+
+    _WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WISH401", "해당 wish 상품은 존재하지 않습니다.")
 
     ;
 
