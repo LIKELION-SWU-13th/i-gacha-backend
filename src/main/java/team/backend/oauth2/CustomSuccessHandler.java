@@ -45,7 +45,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(username, role, 60*60*60L);
+        String token = jwtUtil.createJwt(username, role, 60*60*60L );
 
         response.addCookie(createCookie("Authorization", token));
         response.sendRedirect("https://" + frontendDomain + "/login/oauth2/code/google");
@@ -55,7 +55,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(60*60*60 * 50);
+        cookie.setMaxAge(60*60*60);
         cookie.setPath("/");
         cookie.setDomain(frontendDomain);
         cookie.setHttpOnly(true);
