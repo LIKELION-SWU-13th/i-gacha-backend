@@ -48,7 +48,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String token = jwtUtil.createJwt(username, role, 60*60*60L );
 
         response.addCookie(createCookie("Authorization", token));
-        response.sendRedirect("https://" + frontendDomain + "/login/oauth2/code/google");
+        response.sendRedirect("https://" + frontendDomain + "/oauth2/code/google");
         response.setStatus(HttpStatus.OK.value());
     }
 
