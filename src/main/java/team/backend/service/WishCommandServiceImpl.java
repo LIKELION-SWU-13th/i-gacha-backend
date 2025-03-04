@@ -99,6 +99,11 @@ public class WishCommandServiceImpl implements WishCommandService {
         if (!isChecked) {
             throw new EventHandler(ErrorStatus._USER_NOT_CREATE_EVENT);
         }
+
+        boolean isWishExists = wishRepository.existsByEventId(eventId);
+        if(!isWishExists) {
+            throw new EventHandler(ErrorStatus._EVENT_WISH_NOT_EXIST);
+        }
     }
 
     //크롤링 코드

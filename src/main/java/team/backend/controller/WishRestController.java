@@ -56,7 +56,6 @@ public class WishRestController {
 
     }
 
-
     //선물 삭제
     @DeleteMapping("/{userId}/event/{eventId}/delete/{wishId}")
     public ApiResponse<WishResponseDTO.DeleteResultRsDTO> deleteWish(@PathVariable(name="userId") Long userId,

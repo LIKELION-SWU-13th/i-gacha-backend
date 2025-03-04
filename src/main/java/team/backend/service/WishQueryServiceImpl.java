@@ -53,7 +53,7 @@ public class WishQueryServiceImpl implements WishQueryService{
             throw new EntityNotFoundException("해당 이벤트에 등록된 위시가 없습니다.");
         }
 
-        // 2. 랜덤한 ID 생성
+        // 랜덤한 ID 생성
         Random random = new Random();
         Long randomId;
         Wish wish = null;
