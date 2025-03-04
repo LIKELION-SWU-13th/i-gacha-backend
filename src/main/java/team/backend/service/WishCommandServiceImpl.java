@@ -1,24 +1,27 @@
 package team.backend.service;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import team.backend.apiPayload.code.status.ErrorStatus;
 import team.backend.apiPayload.exception.handler.EventHandler;
-import team.backend.converter.WishConverter;
 import team.backend.domain.Event;
 import team.backend.domain.Wish;
 import team.backend.dto.WishDTO.WishRequestDTO;
-import team.backend.dto.WishDTO.WishResponseDTO;
 import team.backend.repository.EventRepository;
 import team.backend.repository.WishRepository;
 
-import java.io.IOException;
-import java.util.Optional;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +30,7 @@ public class WishCommandServiceImpl implements WishCommandService {
     private final WishRepository wishRepository;
     private final EventRepository eventRepository;
 
-    //위시 생성
+    // 위시 생성
     @Override
     @Transactional
     public Wish joinEvent(Long userId, Long eventId, WishRequestDTO.CreateRqDTO request){
@@ -39,13 +42,16 @@ public class WishCommandServiceImpl implements WishCommandService {
 
         Event eventResult = eventRepository.findById(eventId).orElseThrow(EntityNotFoundException::new);
 
-        //크롤링
-        WishResponseDTO.WishDto crawData = fetchWishData(request.getLink());
+        // 크롤링
+        Map<String, String> crawData = fetchWishData(request.getLink());
 
-        //컨버터에서 WISH 객체 생성
-        Wish newWish = WishConverter.toWish(request, crawData);
+        // 크롤링한 데이터로 Wish 객체 생성
+        Wish newWish = new Wish();
+        newWish.setName(crawData.get("title"));
+        newWish.setLink(request.getLink());
+        newWish.setImageUrl(crawData.get("image"));
 
-        //양방향 매핑
+        // 양방향 매핑
         newWish.setEvent(eventResult);
 
         wishRepository.save(newWish);
@@ -53,11 +59,11 @@ public class WishCommandServiceImpl implements WishCommandService {
         return newWish;
     }
 
-    //위시 수정
+    // 위시 수정
     @Override
     @Transactional
     public Wish updateWish(Long userId, Long eventId, Long wishId, WishRequestDTO.CreateRqDTO request){
-        //USER > EVENT > WISH 검사
+        // USER > EVENT > WISH 검사
         int isChecked = eventRepository.existsWishForUser(userId, eventId, wishId);
         if (isChecked != 1) {
             throw new EventHandler(ErrorStatus._USER_EVENT_WISH);
@@ -66,32 +72,32 @@ public class WishCommandServiceImpl implements WishCommandService {
         Wish wish = wishRepository.findById(wishId)
                 .orElseThrow(() -> new EventHandler(ErrorStatus._WISH_NOT_FOUND));
 
-        //크롤링
-        WishResponseDTO.WishDto crawData = fetchWishData(request.getLink());
+        // 크롤링
+        Map<String, String> crawData = fetchWishData(request.getLink());
 
-        //수정 name, link, imageurl 순서대로 변수 넣기 / link는 임의로 넣었어요..
-        wish.update(crawData.getTitle(), request.getLink(), crawData.getImageUrl());
+        // 수정 name, link, imageurl 순서대로 변수 넣기
+        wish.update(crawData.get("title"), request.getLink(), crawData.get("image"));
 
         wishRepository.save(wish);
 
         return wish;
     }
 
-    //위시 삭제
+    // 위시 삭제
     @Override
     @Transactional
     public void delSerWish(Long userId, Long eventId, Long wishId){
-        //USER > EVENT > WISH 검사
+        // USER > EVENT > WISH 검사
         int isChecked = eventRepository.existsWishForUser(userId, eventId, wishId);
         if (isChecked != 1) {
             throw new EventHandler(ErrorStatus._USER_EVENT_WISH);
         }
 
-        //위시 삭제
+        // 위시 삭제
         wishRepository.deleteById(wishId);
     }
 
-    //위시 조회
+    // 위시 조회
     @Override
     @Transactional
     public void checkEvent(Long userId, Long eventId){
@@ -99,44 +105,49 @@ public class WishCommandServiceImpl implements WishCommandService {
         if (!isChecked) {
             throw new EventHandler(ErrorStatus._USER_NOT_CREATE_EVENT);
         }
-
-        boolean isWishExists = wishRepository.existsByEventId(eventId);
-        if(!isWishExists) {
-            throw new EventHandler(ErrorStatus._EVENT_WISH_NOT_EXIST);
-        }
     }
 
-    //크롤링 코드
-    @Override
+    // 크롤링 코드
     @Transactional
-    public WishResponseDTO.WishDto fetchWishData(String url){
+    public Map<String, String> fetchWishData(String url){
+        Map<String, String> productData = new HashMap<>();
+
         try {
-            // 요청 간 간격을 두기 위해
-            Thread.sleep((long)(Math.random() * 15000) + 10000);
+            // WebDriver 설정
+            WebDriverManager.chromedriver().setup();
+            WebDriver driver = new ChromeDriver();
 
-            Document doc = Jsoup.connect(url)
-                    //.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
-                    .timeout(20000)
-                    .get();
+            driver.get(url);
 
-            // 쿠팡 상품명 및 이미지 크롤링
-            String title = doc.select("meta[property=og:title]").attr("content");
-            String imageUrl = doc.select("img.prod-image__detail").attr("src");
-            //if (imageUrl.startsWith("/")) {
-            //    imageUrl = "https://www.coupang.com" + imageUrl;  // 절대 경로로 변환
-            //}
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            // 상품 정보 반환
-            return new WishResponseDTO.WishDto(title, imageUrl);
-        } catch (java.net.SocketTimeoutException e) {
-            // 타임아웃 발생시 예외 처리
-            throw new RuntimeException("타임아웃 발생: " + e.getMessage(), e);
-        } catch (IOException e) {
-            // 네트워크 오류 발생시 예외 처리
-            throw new RuntimeException("네트워크 오류 발생: " + e.getMessage(), e);
+            // 상품 제목 가져오기
+            WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.prod-buy-header__title")));
+            String title = titleElement.getText();
+            productData.put("title", title);
+
+            // 상품 이미지 가져오기
+            WebElement imageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.prod-image__detail")));
+            String imageUrl = imageElement.getAttribute("src");
+
+            // 고해상도 이미지 URL로 변경
+            String highResImageUrl = imageElement.getAttribute("data-zoom-image-url");
+            if (highResImageUrl != null && !highResImageUrl.isEmpty()) {
+                imageUrl = highResImageUrl;
+            }
+
+            // src 속성이 //로 시작하면 https 추가
+            if (imageUrl.startsWith("//")) {
+                imageUrl = "https:" + imageUrl;
+            }
+
+            productData.put("image", imageUrl);
+
+            driver.quit();
         } catch (Exception e) {
-            // 다른 예외 처리 (예: InterruptedException)
-            throw new RuntimeException("예상치 못한 오류 발생: " + e.getMessage(), e);
+            productData.put("error", e.getMessage());
         }
+
+        return productData;
     }
 }

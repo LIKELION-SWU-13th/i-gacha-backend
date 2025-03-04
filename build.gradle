@@ -49,6 +49,12 @@ dependencies {
 
 	// oauth2-client
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// Selenium
+	implementation 'org.seleniumhq.selenium:selenium-java:4.9.1'
+
+	// WebDriverManager (드라이버 자동 다운로드)
+	implementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
 }
 
 tasks.named('test') {

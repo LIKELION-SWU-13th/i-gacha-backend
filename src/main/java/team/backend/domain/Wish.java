@@ -7,11 +7,11 @@ import org.hibernate.annotations.DynamicUpdate;
 import team.backend.domain.common.BaseEntity;
 
 @Entity
-@Getter
+@Getter @Setter
 @DynamicUpdate
 @DynamicInsert
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 public class Wish extends BaseEntity {
     @Id
