@@ -37,6 +37,7 @@ public class UserController {
             for (Cookie cookie : cookies) {
                 if ("Authorization".equals(cookie.getName())) {
                     token = cookie.getValue();
+                    System.out.println("UserController Authorization: " + token);
                     break;
                 }
             }
@@ -72,7 +73,7 @@ public class UserController {
         cookie.setMaxAge(0); // 쿠키 즉시 삭제
         cookie.setPath("/");  // 모든 경로에서 삭제
         cookie.setHttpOnly(true); // HttpOnly 설정
-        cookie.setDomain(frontendDomain);
+//        cookie.setDomain(frontendDomain);
         response.addCookie(cookie);
     }
 }

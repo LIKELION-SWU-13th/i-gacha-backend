@@ -18,6 +18,8 @@ public class UserService {
 
         // 2. 토큰이 없으면 에러 반환
         if (token == null) {
+
+            System.out.println("UserService token == nul: ");
             throw new AccessDeniedException("Unauthorized: No token found");
         }
 
@@ -27,6 +29,7 @@ public class UserService {
             return userRepository.findByEmail(jwtUtil.getUsername(token)).getId();
         } else {
 
+            System.out.println("Unauthorized: Invalid token");
             throw new AccessDeniedException("Unauthorized: Invalid token");
         }
     }
