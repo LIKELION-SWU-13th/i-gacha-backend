@@ -31,6 +31,7 @@ public class UserController {
         Cookie[] cookies = request.getCookies();
         String token = null;
 
+        System.out.println("getProtectedData");
 
         if (cookies != null) {
 
@@ -51,8 +52,10 @@ public class UserController {
                     .header(HttpHeaders.AUTHORIZATION, token)
                     .body("user_id=" + id);
         } catch (AccessDeniedException e) {
+            System.out.println("AccessDeniedException " + e.getMessage());
             return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Exception " + e.getMessage());
             // 기타 실패 응답
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
@@ -70,7 +73,7 @@ public class UserController {
         cookie.setMaxAge(0); // 쿠키 즉시 삭제
         cookie.setPath("/");  // 모든 경로에서 삭제
         cookie.setHttpOnly(true); // HttpOnly 설정
-//        cookie.setDomain(frontendDomain);
+        cookie.setDomain(frontendDomain);
         response.addCookie(cookie);
     }
 }
