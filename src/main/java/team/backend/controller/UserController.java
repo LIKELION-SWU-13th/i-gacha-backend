@@ -51,8 +51,10 @@ public class UserController {
                     .header(HttpHeaders.AUTHORIZATION, token)
                     .body("user_id=" + id);
         } catch (AccessDeniedException e) {
+            System.out.println("AccessDeniedException: " + e.getMessage());
             return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
             // 기타 실패 응답
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
