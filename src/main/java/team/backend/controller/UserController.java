@@ -73,7 +73,7 @@ public class UserController {
         cookie.setMaxAge(0); // 쿠키 즉시 삭제
         cookie.setPath("/");  // 모든 경로에서 삭제
         cookie.setHttpOnly(true); // HttpOnly 설정
-        cookie.setDomain(frontendDomain);
+//        cookie.setDomain(frontendDomain);
         response.addCookie(cookie);
     }
 }
