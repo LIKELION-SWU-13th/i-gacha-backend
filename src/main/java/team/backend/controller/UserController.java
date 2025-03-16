@@ -37,6 +37,7 @@ public class UserController {
             for (Cookie cookie : cookies) {
                 if ("Authorization".equals(cookie.getName())) {
                     token = cookie.getValue();
+                    System.out.println("UserController Authorization: " + token);
                     break;
                 }
             }
