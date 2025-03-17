@@ -45,7 +45,7 @@ public class UserController {
 
         try {
             Long id = userService.getUserId(token);
-            deleteCookie(response, "Authorization");
+//            deleteCookie(response, "Authorization");
 
             // 4. JWT 토큰이 유효한 경우, 헤더에 포함하여 id와 함께 응답
             return ResponseEntity.ok()
