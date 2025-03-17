@@ -4,13 +4,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import team.backend.domain.Event;
+import team.backend.domain.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-    List<Event> findByUserId(Long userId);
-    Optional<Event> findByUserIdAndId(Long userId, Long eventId);
+    List<Event> findAllByUser(User user);
+    Optional<Event> findByUserAndId(User user, Long eventId);
+
     @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Event e WHERE e.id = :eventId AND e.user.id = :userId")
     Boolean isUserCreator(@Param("userId") Long userId, @Param("eventId") Long eventId);
 
@@ -22,7 +24,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             ") AS tr",
             nativeQuery = true)
     int existsWishForUser(@Param("userId") Long userId,
-                              @Param("eventId") Long eventId,
-                              @Param("wishId") Long wishId);
-
+                          @Param("eventId") Long eventId,
+                          @Param("wishId") Long wishId);
 }

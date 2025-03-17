@@ -1,64 +1,25 @@
 package team.backend.dto;
 
 import lombok.Getter;
-
+import lombok.Setter;
+import team.backend.domain.User;  // User 타입을 사용하기 위해 import
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class EventDto {
-    @Getter
-    private Long id;
+    private User user;  // User 타입으로 변경
     private String name;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Long userId;
 
-    public EventDto(Long id, String name, LocalDateTime startDate, LocalDateTime endDate) {
-        this.id = id;
+    // 생성자는 User 객체를 초기화
+    public EventDto(User user, String name, LocalDateTime startDate, LocalDateTime endDate) {
+        this.user = user;
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.userId = userId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    // Setter 메서드도 필요하다면 추가
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
 }
+

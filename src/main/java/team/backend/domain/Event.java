@@ -23,17 +23,12 @@ public class Event extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 70)
-    private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
+    private String name;
     private LocalDateTime startDate;
-
-    @Column(nullable = false)
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
@@ -45,7 +40,5 @@ public class Event extends BaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
-
 
 }
