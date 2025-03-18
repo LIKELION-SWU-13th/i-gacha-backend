@@ -18,7 +18,6 @@ public class CorsMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메서드
                 .allowCredentials(true)  // 인증 포함 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
-                .exposedHeaders("Authorization", "Content-Type")  // 클라이언트가 읽을 수 있는 헤더
-                .maxAge(3600);  // Preflight 요청 캐시 시간 (초)
+                .exposedHeaders("Authorization", "Content-Type");  // 클라이언트가 읽을 수 있는 헤더
     }
 }
