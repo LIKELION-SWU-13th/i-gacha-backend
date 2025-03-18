@@ -28,9 +28,9 @@ public class EventService {
     public EventDto createEvent(Long userId, EventDto eventDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = new Event(user, eventDto.getName(), eventDto.getStartDate(), eventDto.getEndDate());
+        Event event = new Event(user, eventDto.getName());
         Event savedEvent = eventRepository.save(event);
-        return new EventDto(savedEvent.getUser(), savedEvent.getName(), savedEvent.getStartDate(), savedEvent.getEndDate());
+        return new EventDto(savedEvent.getUser().getId(), savedEvent.getName());
     }
 
     public void deleteEvent(Long userId, Long eventId) {
@@ -47,10 +47,8 @@ public class EventService {
         Event event = eventRepository.findByUserAndId(user, eventId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
         event.setName(eventDto.getName());
-        event.setStartDate(eventDto.getStartDate());
-        event.setEndDate(eventDto.getEndDate());
         Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getUser(), updatedEvent.getName(), updatedEvent.getStartDate(), updatedEvent.getEndDate());
+        return new EventDto(updatedEvent.getUser().getId(), updatedEvent.getName());
     }
 
     public List<EventDto> getAllEvents(Long userId) {
@@ -59,10 +57,8 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventDto(
-                        event.getUser(),
-                        event.getName(),
-                        event.getStartDate(),
-                        event.getEndDate()
+                        event.getUser().getId(),
+                        event.getName()
                 ))
                 .collect(Collectors.toList());
     }
