@@ -20,6 +20,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true)  // 자격 증명(Cookies 등)을 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
                 .allowedOriginPatterns("*")
-                .allowedOrigins("https://" + frontendDomain);
+                .allowedOrigins("https://" + frontendDomain, // 배포
+                "http://localhost:3003");
     }
 }
