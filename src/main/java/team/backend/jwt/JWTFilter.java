@@ -33,7 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // 재로그인 무한루프 방지
         String requestUri = request.getRequestURI();
 
-System.out.println("requestUri: " + requestUri);
+        System.out.println("requestUri: " + requestUri);
         // Swagger UI 및 OpenAPI 문서 경로는 필터를 건너뛰기
         if (requestUri.startsWith("/swagger-ui") || requestUri.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response); // Swagger 관련 경로를 필터링에서 제외
@@ -62,13 +62,13 @@ System.out.println("requestUri: " + requestUri);
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
 
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         } catch (IllegalArgumentException e) {
             PrintWriter writer = response.getWriter();
             writer.print("access token empty");
 
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
