@@ -77,12 +77,12 @@ public class SecurityConfig {
                 .httpBasic((auth) -> auth.disable());
 
         //JWTFilter 추가
-        http
-                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
-        //JWTFilter 추가: 재로그인 루프 방지
-        http
-                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+//        http
+//                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+//
+//        //JWTFilter 추가: 재로그인 루프 방지
+//        http
+//                .addFilterAfter(new JWTFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
 
         //oauth2: OAuth 2.0 로그인 과정에서 사용자 정보를 가져오고, 이를 처리하는 커스텀 서비스를 적용하는 코드
         http
@@ -93,11 +93,15 @@ public class SecurityConfig {
                 );
 
         //경로별 인가 작업
+//        http
+//                .authorizeHttpRequests((auth) -> auth
+//                        .requestMatchers("/", "/api/user/tokenVerification",
+//                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
+//                        .anyRequest().authenticated());
+
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/api/user/tokenVerification",
-                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/swagger-ui/index.html").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
 
         //세션 설정 : STATELESS
         http
