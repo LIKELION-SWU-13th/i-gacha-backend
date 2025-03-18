@@ -16,6 +16,7 @@ import team.backend.service.WishQueryService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/gift")
+@CrossOrigin(origins = "https://${frontend.domain}") // CORS 적용
 public class WishRestController {
     private final WishCommandService wishCommandService;
     private final WishQueryService wishQueryService;

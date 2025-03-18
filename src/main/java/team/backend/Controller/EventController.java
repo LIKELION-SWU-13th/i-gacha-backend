@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/{user_id}/event")
+@CrossOrigin(origins = "https://${frontend.domain}") // CORS 적용
 public class EventController {
 
     private final EventService eventService;

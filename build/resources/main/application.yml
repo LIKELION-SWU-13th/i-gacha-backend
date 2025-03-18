@@ -27,4 +27,4 @@ spring:
       - local
 
 frontend:
-  domain: ${FRONT_DOMAIN}
+  domain: likelion13th-swu.site
