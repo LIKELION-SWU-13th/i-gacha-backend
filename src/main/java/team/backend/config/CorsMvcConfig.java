@@ -13,12 +13,12 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
-
         corsRegistry.addMapping("/**")
                 .allowedOriginPatterns("https://" + frontendDomain)  // 허용할 도메인 패턴
                 .allowedMethods("*")  // 모든 HTTP 메서드 허용
                 .allowCredentials(true)  // 쿠키, 인증 정보 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
-                .exposedHeaders("Authorization", "Content-Type");  // 필요한 헤더만 노출
+                .exposedHeaders("Authorization", "Content-Type")  // 필요한 헤더만 노출
+                .maxAge(3600);  // Preflight 요청 캐시 시간 (초 단위)
     }
 }
