@@ -31,7 +31,7 @@ public class Event extends BaseEntity {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
     private List<Wish> wishList = new ArrayList<>();
 
     public Event(User user, String name, LocalDateTime startDate, LocalDateTime endDate) {

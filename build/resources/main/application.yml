@@ -24,7 +24,7 @@ spring:
     include:
       - database
       - oauth2
-      - local
+#      - local
 
 frontend:
-  domain: likelion13th-swu.site
+  domain: ${FRONT_DOMAIN}

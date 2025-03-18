@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class EventDto {
-    private User user;  // User 타입으로 변경
+    private User user;
     private String name;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
