@@ -14,7 +14,7 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3001", "http://localhost:3007", "https://" + frontendDomain)  // 프론트엔드 허용
+                .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3007", "https://" + frontendDomain)  // 프론트엔드 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메서드
                 .allowCredentials(true)  // 인증 포함 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
