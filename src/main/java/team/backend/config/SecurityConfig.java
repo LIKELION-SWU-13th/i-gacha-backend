@@ -54,7 +54,7 @@ public class SecurityConfig {
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
-                        configuration.setMaxAge(3600L); // maxAge 추가 (Preflight 요청 캐시 시간 설정)
+                        configuration.setMaxAge(3600L);
 
                         configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));

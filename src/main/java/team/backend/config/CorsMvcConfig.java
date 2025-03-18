@@ -13,11 +13,13 @@ public class CorsMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
+
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3007", "https://" + frontendDomain)  // 프론트엔드 허용
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메서드
-                .allowCredentials(true)  // 인증 포함 허용
+                .exposedHeaders( "*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowCredentials(true)  // 자격 증명(Cookies 등)을 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
-                .exposedHeaders("Authorization", "Content-Type");  // 클라이언트가 읽을 수 있는 헤더
+                .allowedOriginPatterns("*")
+                .allowedOrigins("https://" + frontendDomain);
     }
 }
