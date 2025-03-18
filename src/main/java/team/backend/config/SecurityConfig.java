@@ -18,6 +18,7 @@ import team.backend.jwt.JWTUtil;
 import team.backend.oauth2.CustomSuccessHandler;
 import team.backend.service.CustomOAuth2UserService;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -50,7 +51,13 @@ public class SecurityConfig {
 
                         CorsConfiguration configuration = new CorsConfiguration();
 
-                        configuration.setAllowedOrigins(Collections.singletonList("https://" + frontendDomain));
+//                        configuration.setAllowedOrigins(Collections.singletonList("https://" + frontendDomain));
+                        configuration.setAllowedOrigins(Arrays.asList(
+                                "https://" + frontendDomain,  // 기존 도메인
+                                "http://localhost:3003",      // ✅ HTTP 로컬 개발 환경
+                                "https://localhost:3003",     // ✅ HTTPS 로컬 환경 (SSL 적용 시)
+                                "https://api.likelion13th-swu.site"  // ✅ 배포된 백엔드
+                        ));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
