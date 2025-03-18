@@ -14,9 +14,9 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOriginPatterns("https://" + frontendDomain)  // 허용할 도메인 패턴
-                .allowedMethods("*")  // 모든 HTTP 메서드 허용
-                .allowCredentials(true)  // 쿠키, 인증 정보 허용
+                .allowedOriginPatterns(frontendDomain.startsWith("http") ? frontendDomain : "http://" + frontendDomain, "http://localhost:3007")  // 로컬 개발 환경 허용
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메서드
+                .allowCredentials(true)  // 인증 정보 포함 허용 (쿠키 등)
                 .allowedHeaders("*")  // 모든 헤더 허용
                 .exposedHeaders("Authorization", "Content-Type")  // 필요한 헤더만 노출
                 .maxAge(3600);  // Preflight 요청 캐시 시간 (초 단위)
