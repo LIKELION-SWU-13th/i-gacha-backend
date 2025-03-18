@@ -15,11 +15,10 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry corsRegistry) {
 
         corsRegistry.addMapping("/**")
-                .exposedHeaders( "*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowCredentials(true)  // 자격 증명(Cookies 등)을 허용
+                .allowedOriginPatterns("https://" + frontendDomain)  // 허용할 도메인 패턴
+                .allowedMethods("*")  // 모든 HTTP 메서드 허용
+                .allowCredentials(true)  // 쿠키, 인증 정보 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
-                .allowedOriginPatterns("*")
-                .allowedOrigins("https://" + frontendDomain);
+                .exposedHeaders("Authorization", "Content-Type");  // 필요한 헤더만 노출
     }
 }
