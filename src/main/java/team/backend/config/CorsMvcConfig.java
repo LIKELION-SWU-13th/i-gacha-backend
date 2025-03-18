@@ -14,11 +14,11 @@ public class CorsMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry corsRegistry) {
         corsRegistry.addMapping("/**")
-                .allowedOriginPatterns(frontendDomain.startsWith("http") ? frontendDomain : "http://" + frontendDomain, "http://localhost:3007")  // 로컬 개발 환경 허용
+                .allowedOrigins("http://localhost:3001", "http://localhost:3007", "https://" + frontendDomain)  // 프론트엔드 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // 허용할 HTTP 메서드
-                .allowCredentials(true)  // 인증 정보 포함 허용 (쿠키 등)
+                .allowCredentials(true)  // 인증 포함 허용
                 .allowedHeaders("*")  // 모든 헤더 허용
-                .exposedHeaders("Authorization", "Content-Type")  // 필요한 헤더만 노출
-                .maxAge(3600);  // Preflight 요청 캐시 시간 (초 단위)
+                .exposedHeaders("Authorization", "Content-Type")  // 클라이언트가 읽을 수 있는 헤더
+                .maxAge(3600);  // Preflight 요청 캐시 시간 (초)
     }
 }
