@@ -13,6 +13,8 @@ import team.backend.dto.WishDTO.WishResponseDTO;
 import team.backend.service.WishCommandService;
 import team.backend.service.WishQueryService;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/gift")
@@ -25,10 +27,9 @@ public class WishRestController {
     @GetMapping("/{userId}/event/{eventId}")
     public ApiResponse<WishResponseDTO.GetWishTotalListRsDTO> getWishList(
             @PathVariable(name="userId") Long userId,
-            @PathVariable(name="eventId") Long eventId,
-            @RequestParam(name = "page") Integer page){
+            @PathVariable(name="eventId") Long eventId){
         wishCommandService.checkEvent(userId, eventId);
-        Page<Wish> wishPage = wishQueryService.getWishList(eventId, page);
+        List<Wish> wishPage = wishQueryService.getWishList(eventId);
         return ApiResponse.onSuccess(WishConverter.wishViewListDTO(wishPage));
     }
 

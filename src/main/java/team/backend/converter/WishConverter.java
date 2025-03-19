@@ -46,15 +46,10 @@ public class WishConverter {
                 .build();
     }
 
-    public static WishResponseDTO.GetWishTotalListRsDTO wishViewListDTO(Page<Wish> wishList){
+    public static WishResponseDTO.GetWishTotalListRsDTO wishViewListDTO(List<Wish> wishList){
         List<WishResponseDTO.GetWishTotalRsDTO> wishViewDTOList = wishList.stream()
                 .map(WishConverter::wishViewDTO).collect(Collectors.toList());
         return WishResponseDTO.GetWishTotalListRsDTO.builder()
-                .isLast(wishList.isLast())
-                .isFirst(wishList.isFirst())
-                .totalPage(wishList.getTotalPages())
-                .totalElements(wishList.getTotalElements())
-                .listSize(wishViewDTOList.size())
                 .wishList(wishViewDTOList)
                 .build();
     }

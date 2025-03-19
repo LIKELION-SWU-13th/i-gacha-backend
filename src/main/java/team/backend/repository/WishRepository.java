@@ -11,7 +11,7 @@ import team.backend.domain.Wish;
 import java.util.List;
 
 public interface WishRepository extends JpaRepository<Wish, Long> {
-    Page<Wish> findAllByEvent(Event event, PageRequest pageRequest);
+    List<Wish> findAllByEvent(Event event);
     List<Wish> findByEventId(Long eventId);
 
     @Query("SELECT MIN(w.id) FROM Wish w WHERE w.event.id = :eventId")

@@ -15,11 +15,6 @@ public class WishResponseDTO {
     @AllArgsConstructor
     public static class GetWishTotalListRsDTO{
         List<GetWishTotalRsDTO> wishList;
-        Integer listSize;
-        Integer totalPage;
-        Long totalElements;
-        Boolean isFirst;
-        Boolean isLast;
     }
 
     @Builder
