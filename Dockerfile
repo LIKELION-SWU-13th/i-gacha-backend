@@ -9,11 +9,13 @@ COPY gradle gradle
 COPY build.gradle settings.gradle ./
 # COPY build.gradle.kts settings.gradle.kts ./    Kotlin인 경우 .kts 확장자 적용
 
+RUN chmod +x ./gradlew
+
 RUN ./gradlew dependencies --no-daemon
 
 COPY . .
 
-RUN chmod +x ./gradlew
+RUN #chmod +x ./gradlew
 
 RUN ./gradlew bootJar --no-daemon
 
