@@ -30,6 +30,14 @@ COPY --from=build --chown=worker:worker /app/build/libs/*.jar ./main.jar
 
 USER worker:worker
 
+# 크롬 설치
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+RUN rm ./google-chrome-stable_current_amd64.deb
+
+# 크롬 버전 확인
+RUN google-chrome --version
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "main.jar"]
