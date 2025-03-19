@@ -9,13 +9,15 @@ COPY gradle gradle
 COPY build.gradle settings.gradle ./
 # COPY build.gradle.kts settings.gradle.kts ./    Kotlin인 경우 .kts 확장자 적용
 
-RUN chmod +x gradlew  # 실행 권한 부여
+# gradlew에 실행 권한을 부여
+RUN chmod +x ./gradlew
+
+# Gradle dependencies를 먼저 다운로드
 RUN ./gradlew dependencies --no-daemon
 
 COPY . .
 
-#RUN chmod +x ./gradlew
-
+# Gradle로 JAR 파일을 빌드
 RUN ./gradlew bootJar --no-daemon
 
 # jar 실행을 위한 JRE 이미지 적용
