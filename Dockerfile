@@ -23,12 +23,9 @@ WORKDIR /app
 
 # Chrome 및 ChromeDriver 설치
 RUN apk add --no-cache \
-    bash \
-    curl \
-    unzip \
-    udev \
     chromium \
-    chromium-chromedriver
+    chromium-chromedriver \
+    && ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
 
 # 사용자 추가
 RUN addgroup -g 1000 worker && \
