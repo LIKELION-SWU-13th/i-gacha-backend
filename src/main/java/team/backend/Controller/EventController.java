@@ -26,19 +26,10 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    // 특정 이벤트 조회 추가 (event_id 기반 조회)
-    @GetMapping("/{user_id}/event/{event_id}")
-    public ResponseEntity<EventDto> getEventById(
-            @PathVariable Long user_id,
-            @PathVariable Long event_id) {
-        EventDto event = eventService.getEventById(user_id, event_id);
-        return ResponseEntity.ok(event);
-    }
-
     // 이벤트 생성
     @PostMapping("/{user_id}/event/create")
     public ResponseEntity<Long> createEvent(@PathVariable Long user_id, @RequestBody EventDto eventDto) {
-        Long createdEventId = eventService.createEvent(user_id, eventDto).getUserId();
+        Long createdEventId = eventService.createEvent(user_id, eventDto).getEventId();
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEventId);
     }
 

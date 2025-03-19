@@ -13,8 +13,6 @@ import team.backend.domain.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import java.util.Optional;
-
 @Service
 public class EventService {
 
@@ -32,7 +30,7 @@ public class EventService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
         Event event = new Event(user, eventDto.getName());
         Event savedEvent = eventRepository.save(event);
-        return new EventDto(savedEvent.getUser().getId(), savedEvent.getName());
+        return new EventDto(savedEvent.getId(), savedEvent.getName());
     }
 
     public void deleteEvent(Long userId, Long eventId) {
@@ -50,7 +48,7 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
         event.setName(eventDto.getName());
         Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getUser().getId(), updatedEvent.getName());
+        return new EventDto(updatedEvent.getUser().getId(),updatedEvent.getName());
     }
 
     public List<EventDto> getAllEvents(Long userId) {
@@ -59,20 +57,9 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventDto(
-                        event.getId(),
-                        event.getName()
+                        event.getUser().getId(),event.getName()
                 ))
                 .collect(Collectors.toList());
-    }
-
-    public EventDto getEventById(Long userId, Long eventId) {
-        Optional<Event> eventOptional = eventRepository.findByIdAndUserId(eventId, userId);
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            return new EventDto(event.getId(), event.getName());
-        } else {
-            throw new RuntimeException("Event not found");
-        }
     }
 
 }
