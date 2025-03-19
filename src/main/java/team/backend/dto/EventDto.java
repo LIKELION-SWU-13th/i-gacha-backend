@@ -2,7 +2,6 @@ package team.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import team.backend.domain.User;  // User 타입을 사용하기 위해 import
 
 @Getter
 @Setter

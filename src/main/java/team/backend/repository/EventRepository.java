@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findAllByUser(User user);
     Optional<Event> findByUserAndId(User user, Long eventId);
+    Optional<Event> findByIdAndUserId(Long eventId, Long userId);
 
     @Query("SELECT CASE WHEN COUNT(e) > 0 THEN true ELSE false END FROM Event e WHERE e.id = :eventId AND e.user.id = :userId")
     Boolean isUserCreator(@Param("userId") Long userId, @Param("eventId") Long eventId);

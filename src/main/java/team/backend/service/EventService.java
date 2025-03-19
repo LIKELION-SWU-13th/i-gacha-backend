@@ -13,6 +13,8 @@ import team.backend.domain.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.Optional;
+
 @Service
 public class EventService {
 
@@ -57,10 +59,20 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventDto(
-                        event.getUser().getId(),
+                        event.getId(),
                         event.getName()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    public EventDto getEventById(Long userId, Long eventId) {
+        Optional<Event> eventOptional = eventRepository.findByIdAndUserId(eventId, userId);
+        if (eventOptional.isPresent()) {
+            Event event = eventOptional.get();
+            return new EventDto(event.getId(), event.getName());
+        } else {
+            throw new RuntimeException("Event not found");
+        }
     }
 
 }
