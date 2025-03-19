@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import team.backend.apiPayload.code.status.ErrorStatus;
+import team.backend.apiPayload.exception.handler.EventHandler;
 import team.backend.domain.common.BaseEntity;
 
 @Entity
@@ -43,6 +45,8 @@ public class Wish extends BaseEntity {
         if (link != null) this.link = link;
         if (imageUrl != null && !this.imageUrl.equals(imageUrl)) { // 변경 감지 강제 적용
             this.imageUrl = imageUrl;
+        }else{
+            throw new EventHandler(ErrorStatus._LINK_ERROR);
         }
         return this;
     }

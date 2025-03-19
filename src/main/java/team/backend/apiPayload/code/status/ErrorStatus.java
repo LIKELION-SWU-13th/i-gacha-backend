@@ -21,7 +21,9 @@ public enum ErrorStatus implements BaseErrorCode {
     _EVENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "EVENT403", "해당 이벤트가 존재하지 않습니다."),
     _EVENT_WISH_NOT_EXIST(HttpStatus.BAD_REQUEST, "EVENT404", "해당 이벤트에 위시는 존재하지 않습니다."),
 
-    _WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WISH401", "해당 wish 상품은 존재하지 않습니다.")
+    _WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WISH401", "해당 wish 상품은 존재하지 않습니다."),
+
+    _LINK_ERROR(HttpStatus.BAD_REQUEST, "LINK401", "올바른 link를 던져주세요")
 
     ;
 
