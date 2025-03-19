@@ -24,6 +24,11 @@ RUN ./gradlew bootJar --no-daemon
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
+# 크롬 다운로드
+RUN apk update && \
+    apk add --no-cache \
+    chromium \
+    bash
 
 RUN apk update && \
     apk add --no-cache \
