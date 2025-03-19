@@ -24,25 +24,13 @@ RUN ./gradlew bootJar --no-daemon
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# 크롬 설치
+# alpine에서 google chrome을 설치하려면 별도의 설치 과정이 필요
 RUN apk update && \
     apk add --no-cache \
-    chromium \
-    bash
-
-# chromedriver 수동 다운로드 및 설치
-RUN wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip && \
-    mv chromedriver /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm chromedriver_linux64.zip
-
-# chromedriver 경로를 환경 변수에 설정
-ENV PATH="/usr/local/bin/chromedriver:${PATH}"
+    chromium
 
 # chromium 설치 후 크롬 버전 확인
 RUN chromium --version
-RUN chromedriver --version
 
 
 
