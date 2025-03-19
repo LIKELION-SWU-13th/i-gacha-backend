@@ -25,9 +25,17 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # 크롬 설치
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
-RUN rm ./google-chrome-stable_current_amd64.deb
+RUN apk update && \
+    apk add --no-cache \
+    chromium \
+    chromedriver \
+    bash
+
+# chromium 설치 후 크롬 버전 확인
+RUN chromium --version
+RUN chromedriver --version
+
+
 
 RUN addgroup -g 1000 worker && \
     adduser -u 1000 -G worker -s /bin/sh -D worker
