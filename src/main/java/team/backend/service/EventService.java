@@ -30,7 +30,7 @@ public class EventService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
         Event event = new Event(user, eventDto.getName());
         Event savedEvent = eventRepository.save(event);
-        return new EventDto(savedEvent.getUser().getId(), savedEvent.getName());
+        return new EventDto(savedEvent.getId(), savedEvent.getName());
     }
 
     public void deleteEvent(Long userId, Long eventId) {
@@ -48,7 +48,7 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
         event.setName(eventDto.getName());
         Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getUser().getId(), updatedEvent.getName());
+        return new EventDto(updatedEvent.getUser().getId(),updatedEvent.getName());
     }
 
     public List<EventDto> getAllEvents(Long userId) {
@@ -57,8 +57,7 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventDto(
-                        event.getUser().getId(),
-                        event.getName()
+                        event.getUser().getId(),event.getName()
                 ))
                 .collect(Collectors.toList());
     }

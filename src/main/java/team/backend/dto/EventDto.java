@@ -2,16 +2,15 @@ package team.backend.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import team.backend.domain.User;  // User 타입을 사용하기 위해 import
 
 @Getter
 @Setter
 public class EventDto {
-    private Long userId;
+    private Long eventId;
     private String name;
 
-    public EventDto(Long userId, String name) {
-        this.userId = userId;
+    public EventDto(Long eventId, String name) {
+        this.eventId = eventId;
         this.name = name;
     }
 
