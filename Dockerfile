@@ -28,8 +28,14 @@ WORKDIR /app
 RUN apk update && \
     apk add --no-cache \
     chromium \
-    chromedriver \
     bash
+
+# chromedriver 수동 다운로드 및 설치
+RUN wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    mv chromedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm chromedriver_linux64.zip
 
 # chromium 설치 후 크롬 버전 확인
 RUN chromium --version
