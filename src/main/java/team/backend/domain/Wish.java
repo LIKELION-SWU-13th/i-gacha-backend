@@ -41,7 +41,9 @@ public class Wish extends BaseEntity {
     public Wish update(String name, String link, String imageUrl) {
         if (name != null) this.name = name;
         if (link != null) this.link = link;
-        if (imageUrl != null) this.imageUrl = imageUrl;
+        if (imageUrl != null && !this.imageUrl.equals(imageUrl)) { // 변경 감지 강제 적용
+            this.imageUrl = imageUrl;
+        }
         return this;
     }
 

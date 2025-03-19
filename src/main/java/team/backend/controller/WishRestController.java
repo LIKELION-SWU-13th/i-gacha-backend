@@ -55,7 +55,6 @@ public class WishRestController {
     ){
         Wish wish = wishCommandService.updateWish(userId, eventId, wishId, request);
         return ApiResponse.onSuccess(WishConverter.createResult(wish));
-
     }
 
     //선물 삭제
