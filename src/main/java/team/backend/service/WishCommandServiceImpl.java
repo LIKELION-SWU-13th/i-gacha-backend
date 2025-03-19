@@ -1,12 +1,7 @@
 package team.backend.service;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.WaitUntilState;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +14,8 @@ import team.backend.dto.WishDTO.WishRequestDTO;
 import team.backend.repository.EventRepository;
 import team.backend.repository.WishRepository;
 
-import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -112,47 +107,61 @@ public class WishCommandServiceImpl implements WishCommandService {
         }
     }
 
-    // 크롤링 코드
-    @Transactional
-    public Map<String, String> fetchWishData(String url){
+    // Playwright 기반 크롤링 코드
+    public Map<String, String> fetchWishData(String url) {
         Map<String, String> productData = new HashMap<>();
 
-        try {
-            // WebDriver 설정
-            WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
+                    .setHeadless(true)
+                    .setArgs(List.of(
+                            "--disable-blink-features=AutomationControlled",  // 자동화 감지 방지
+                            "--no-sandbox",
+                            "--disable-gpu"
+                    ))
+            );
 
-            driver.get(url);
+            // HTTP/1.1 강제 + User-Agent 조작
+            BrowserContext context = browser.newContext(new Browser.NewContextOptions()
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36")
+                    .setExtraHTTPHeaders(Map.of(
+                            "accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                            "accept-encoding", "gzip, deflate",  // HTTP/1.1 강제
+                            "accept-language", "en-US,en;q=0.5"
+                    ))
+            );
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            Page page = context.newPage();
 
-            // 상품 제목 가져오기
-            WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.prod-buy-header__title")));
-            String title = titleElement.getText();
-            productData.put("title", title);
+            // 자동화 감지 방지
+            page.addInitScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
 
-            // 상품 이미지 가져오기
-            WebElement imageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.prod-image__detail")));
-            String imageUrl = imageElement.getAttribute("src");
+            // 페이지 이동 (HTTP/2 오류 방지) → `navigate()` 사용
+            page.navigate(url, new Page.NavigateOptions().setWaitUntil(WaitUntilState.DOMCONTENTLOADED));
+            System.out.println("✅ 페이지 이동 완료: " + url);
 
-            // 고해상도 이미지 URL로 변경
-            String highResImageUrl = imageElement.getAttribute("data-zoom-image-url");
-            if (highResImageUrl != null && !highResImageUrl.isEmpty()) {
-                imageUrl = highResImageUrl;
-            }
+            // 제목 가져오기
+            String title = page.textContent("h1.prod-buy-header__title").trim();
+            System.out.println("🔍 크롤링된 제목: " + title);
 
-            // src 속성이 //로 시작하면 https 추가
-            if (imageUrl.startsWith("//")) {
+            // 이미지 가져오기
+            String imageUrl = page.getAttribute("img.prod-image__detail", "src");
+            if (imageUrl != null && imageUrl.startsWith("//")) {
                 imageUrl = "https:" + imageUrl;
             }
+            System.out.println("🔍 크롤링된 이미지: " + imageUrl);
 
+            // 데이터 저장
+            productData.put("title", title);
             productData.put("image", imageUrl);
 
-            driver.quit();
+            browser.close();
         } catch (Exception e) {
+            System.out.println("❌ 크롤링 실패: " + e.getMessage());
             productData.put("error", e.getMessage());
         }
 
         return productData;
     }
+
 }
