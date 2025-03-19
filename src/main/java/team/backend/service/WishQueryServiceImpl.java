@@ -24,10 +24,9 @@ public class WishQueryServiceImpl implements WishQueryService{
     private final WishRepository wishRepository;
 
     @Override
-    public Page<Wish> getWishList(Long eventId, Integer page){
+    public List<Wish> getWishList(Long eventId){
         Event event = eventRepository.findById(eventId).get();
-        Page<Wish> EventPage = wishRepository.findAllByEvent(event, PageRequest.of(page, 10));
-        return EventPage;
+        return wishRepository.findAllByEvent(event);
     }
 
     @Override
