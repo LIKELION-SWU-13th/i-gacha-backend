@@ -32,7 +32,11 @@ USER worker:worker
 
 # 크롬 설치
 RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+# 권한 부여 후 다운로드
+RUN chmod +x google-chrome-stable_current_amd64.deb
+RUN apk add --no-cache --allow-untrusted ./google-chrome-stable_current_amd64.deb
+
 RUN rm ./google-chrome-stable_current_amd64.deb
 
 # 크롬 버전 확인
