@@ -14,5 +14,10 @@ public class EventDto {
         this.name = name;
     }
 
+    public Long getId() {
+        return eventId;
+    }
+
+
 }
 
