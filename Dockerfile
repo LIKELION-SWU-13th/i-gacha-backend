@@ -37,6 +37,9 @@ RUN wget -q https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriv
     chmod +x /usr/local/bin/chromedriver && \
     rm chromedriver_linux64.zip
 
+# chromedriver 경로를 환경 변수에 설정
+ENV PATH="/usr/local/bin/chromedriver:${PATH}"
+
 # chromium 설치 후 크롬 버전 확인
 RUN chromium --version
 RUN chromedriver --version
