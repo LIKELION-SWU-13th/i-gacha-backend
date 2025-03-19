@@ -41,8 +41,6 @@ COPY --from=build --chown=worker:worker /app/build/libs/*.jar ./main.jar
 
 USER worker:worker
 
-# 크롬 버전 확인
-RUN google-chrome --version
 
 EXPOSE 8080
 
