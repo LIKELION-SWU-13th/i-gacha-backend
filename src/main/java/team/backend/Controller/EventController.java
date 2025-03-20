@@ -49,12 +49,13 @@ public class EventController {
     }
 
     // 이벤트 수정
-    @PatchMapping("/{event_id}/update")
+    @PatchMapping("api/{user_id}/event/{event_id}/update")
     public ResponseEntity<EventDto> updateEvent(
+            @PathVariable Long user_id,
             @PathVariable Long event_id,
             @RequestBody EventDto eventDto) {
 
-        EventDto updatedEvent = eventService.updateEvent(event_id, eventDto);
+        EventDto updatedEvent = eventService.updateEvent(user_id, event_id, eventDto);
         return ResponseEntity.ok(updatedEvent);
     }
 }

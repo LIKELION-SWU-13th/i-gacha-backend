@@ -34,18 +34,22 @@ public class EventService {
         return new EventGetDto(savedEvent.getId(), savedEvent.getName());
     }
 
-    public EventDto updateEvent(Long eventId, EventDto eventCreateDto) {
+    public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + eventId));
 
-        event.setName(eventCreateDto.getName());
+        // 해당 이벤트가 userId의 소유자인지 검증
+        if (!event.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("User does not have permission to update this event");
+        }
 
-        Event updatedEvent = eventRepository.save(event);
+        event.setName(eventDto.getName());
+        eventRepository.save(event);
 
-        EventDto eventDto = new EventDto();
-        eventDto.setName(updatedEvent.getName());
-        return eventDto;
+        return new EventDto(event.getName());
+
     }
+
 
     public void deleteEvent(Long userId, Long eventId) {
         User user = userRepository.findById(userId)
@@ -62,7 +66,7 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventGetDto(
-                        event.getId(), event.getName()  // event_id와 name을 포함하여 반환
+                        event.getId(), event.getName()
                 ))
                 .collect(Collectors.toList());
     }
