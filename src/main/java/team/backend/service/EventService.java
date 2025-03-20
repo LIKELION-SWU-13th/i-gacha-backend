@@ -34,14 +34,6 @@ public class EventService {
         return new EventGetDto(savedEvent.getId(), savedEvent.getName());
     }
 
-    public void deleteEvent(Long userId, Long eventId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = eventRepository.findByUserAndId(user, eventId)
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
-        eventRepository.delete(event);
-    }
-
     public EventDto updateEvent(Long eventId, EventDto eventCreateDto) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + eventId));
@@ -50,10 +42,19 @@ public class EventService {
 
         Event updatedEvent = eventRepository.save(event);
 
-        EventDto eventRto = new EventDto();
-        eventRto.setName(updatedEvent.getName());
-        return eventRto;
+        EventDto eventDto = new EventDto();
+        eventDto.setName(updatedEvent.getName());
+        return eventDto;
     }
+
+    public void deleteEvent(Long userId, Long eventId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+        Event event = eventRepository.findByUserAndId(user, eventId)
+                .orElseThrow(() -> new EventNotFoundException("Event not found"));
+        eventRepository.delete(event);
+    }
+
 
     public List<EventGetDto> getAllEvents(Long userId) {
         User user = userRepository.findById(userId)
