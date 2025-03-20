@@ -29,7 +29,7 @@ public class EventController {
     // 이벤트 생성
     @PostMapping("/{user_id}/event/create")
     public ResponseEntity<Long> createEvent(@PathVariable Long user_id, @RequestBody EventDto eventDto) {
-        Long createdEventId = eventService.createEvent(user_id, eventDto).getEventId();
+        Long createdEventId = eventService.createEvent(user_id, eventDto).getId();
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEventId);
     }
 
