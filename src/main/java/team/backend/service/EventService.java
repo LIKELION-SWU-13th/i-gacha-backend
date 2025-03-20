@@ -3,7 +3,7 @@ package team.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.backend.dto.EventDto.EventDto;
-import team.backend.dto.EventDto.EventCreateDto;
+import team.backend.dto.EventDto.EventGetDto;
 import team.backend.domain.Event;
 import team.backend.repository.UserRepository;
 import team.backend.repository.EventRepository;
@@ -26,12 +26,25 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public EventDto createEvent(Long userId, EventCreateDto eventCreateDto) {
+    public EventGetDto createEvent(Long userId, EventDto eventCreateDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
         Event event = new Event(user, eventCreateDto.getName());
         Event savedEvent = eventRepository.save(event);
-        return new EventDto(savedEvent.getId(), savedEvent.getName());
+        return new EventGetDto(savedEvent.getId(), savedEvent.getName());
+    }
+
+    public EventDto updateEvent(Long eventId, EventDto eventCreateDto) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + eventId));
+
+        event.setName(eventCreateDto.getName());
+
+        Event updatedEvent = eventRepository.save(event);
+
+        EventDto eventDto = new EventDto();
+        eventDto.setName(updatedEvent.getName());
+        return eventDto;
     }
 
     public void deleteEvent(Long userId, Long eventId) {
@@ -42,23 +55,14 @@ public class EventService {
         eventRepository.delete(event);
     }
 
-    public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = eventRepository.findByUserAndId(user, eventId)
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
-        event.setName(eventDto.getName());
-        Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getId(),updatedEvent.getName());
-    }
 
-    public List<EventDto> getAllEvents(Long userId) {
+    public List<EventGetDto> getAllEvents(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
 
         return eventRepository.findAllByUser(user).stream()
-                .map(event -> new EventDto(
-                        event.getId(),event.getName()
+                .map(event -> new EventGetDto(
+                        event.getId(), event.getName()  // event_id와 name을 포함하여 반환
                 ))
                 .collect(Collectors.toList());
     }
