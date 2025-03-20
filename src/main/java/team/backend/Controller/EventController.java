@@ -3,10 +3,14 @@ package team.backend.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.backend.dto.EventDto;
+import team.backend.dto.EventDto.EventDto;
+import team.backend.dto.EventDto.EventCreateDto;
 import team.backend.service.EventService;
 
 import java.util.List;
+
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api")
@@ -28,9 +32,13 @@ public class EventController {
 
     // 이벤트 생성
     @PostMapping("/{user_id}/event/create")
-    public ResponseEntity<Long> createEvent(@PathVariable Long user_id, @RequestBody EventDto eventDto) {
-        Long createdEventId = eventService.createEvent(user_id, eventDto).getEventId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEventId);
+    public ResponseEntity<Map<String, Long>> createEvent(@PathVariable Long user_id, @RequestBody EventCreateDto eventCreateDto) {
+        Long createdEventId = eventService.createEvent(user_id, eventCreateDto).getEventId();
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("event_id", createdEventId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 이벤트 삭제
