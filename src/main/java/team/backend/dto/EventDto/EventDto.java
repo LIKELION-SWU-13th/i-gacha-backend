@@ -1,4 +1,4 @@
-package team.backend.dto;
+package team.backend.dto.EventDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +15,5 @@ public class EventDto {
     }
 
 }
+
 

@@ -2,7 +2,8 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.backend.dto.EventDto;
+import team.backend.dto.EventDto.EventDto;
+import team.backend.dto.EventDto.EventCreateDto;
 import team.backend.domain.Event;
 import team.backend.repository.UserRepository;
 import team.backend.repository.EventRepository;
@@ -25,10 +26,10 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public EventDto createEvent(Long userId, EventDto eventDto) {
+    public EventDto createEvent(Long userId, EventCreateDto eventCreateDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = new Event(user, eventDto.getName());
+        Event event = new Event(user, eventCreateDto.getName());
         Event savedEvent = eventRepository.save(event);
         return new EventDto(savedEvent.getId(), savedEvent.getName());
     }
