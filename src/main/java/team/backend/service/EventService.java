@@ -48,7 +48,7 @@ public class EventService {
                 .orElseThrow(() -> new EventNotFoundException("Event not found"));
         event.setName(eventDto.getName());
         Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getUser().getId(),updatedEvent.getName());
+        return new EventDto(updatedEvent.getId(),updatedEvent.getName());
     }
 
     public List<EventDto> getAllEvents(Long userId) {
@@ -57,7 +57,7 @@ public class EventService {
 
         return eventRepository.findAllByUser(user).stream()
                 .map(event -> new EventDto(
-                        event.getUser().getId(),event.getName()
+                        event.getId(),event.getName()
                 ))
                 .collect(Collectors.toList());
     }
