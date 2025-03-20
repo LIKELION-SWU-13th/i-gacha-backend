@@ -9,6 +9,9 @@ import team.backend.service.EventService;
 
 import java.util.List;
 
+import java.util.Map;
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "https://${frontend.domain}") // CORS 적용
@@ -29,9 +32,13 @@ public class EventController {
 
     // 이벤트 생성
     @PostMapping("/{user_id}/event/create")
-    public ResponseEntity<Long> createEvent(@PathVariable Long user_id, @RequestBody EventCreateDto eventCreateDto) {
+    public ResponseEntity<Map<String, Long>> createEvent(@PathVariable Long user_id, @RequestBody EventCreateDto eventCreateDto) {
         Long createdEventId = eventService.createEvent(user_id, eventCreateDto).getEventId();
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEventId);
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("event_id", createdEventId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 이벤트 삭제
