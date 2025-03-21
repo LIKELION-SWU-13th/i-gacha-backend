@@ -3,6 +3,7 @@ package team.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import team.backend.dto.EventDto.EventDto;
+import team.backend.dto.EventDto.EventCreateDto;
 import team.backend.dto.EventDto.EventGetDto;
 import team.backend.domain.Event;
 import team.backend.repository.UserRepository;
@@ -26,15 +27,16 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public Long createEvent(Long userId, EventDto eventDto) {
+    public EventCreateDto createEvent(Long userId, EventDto eventDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         Event event = new Event(user, eventDto.getName());  // eventDto.getName() 사용
         Event savedEvent = eventRepository.save(event);
 
-        return savedEvent.getId();
+        return new EventCreateDto(savedEvent.getId());  // EventCreateDto로 응답 반환
     }
+
 
     public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
         Event event = eventRepository.findById(eventId)
