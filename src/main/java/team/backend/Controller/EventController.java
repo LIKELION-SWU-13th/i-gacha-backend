@@ -49,7 +49,7 @@ public class EventController {
     }
 
     // 이벤트 수정
-    @PatchMapping("api/{user_id}/event/{event_id}/update")
+    @PatchMapping("/{user_id}/event/{event_id}/update")
     public ResponseEntity<EventDto> updateEvent(
             @PathVariable Long user_id,
             @PathVariable Long event_id,
