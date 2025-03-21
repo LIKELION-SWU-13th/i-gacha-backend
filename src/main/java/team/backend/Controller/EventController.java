@@ -36,7 +36,7 @@ public class EventController {
     public ResponseEntity<EventCreateDto> createEvent(@PathVariable Long user_id, @RequestBody EventDto eventDto) {
         EventCreateDto createdEvent = eventService.createEvent(user_id, eventDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);  // EventCreateDto 반환
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
     // 이벤트 삭제

@@ -13,3 +13,4 @@ public class EventCreateDto {
         this.eventId = eventId;
     }
 }
+
