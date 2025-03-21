@@ -33,7 +33,8 @@ public class EventController {
     // 이벤트 생성
     @PostMapping("/{user_id}/event/create")
     public ResponseEntity<Map<String, Long>> createEvent(@PathVariable Long user_id, @RequestBody EventDto eventCreateDto) {
-        Long createdEventId = eventService.createEvent(user_id, eventCreateDto).getEventId();
+
+        Long createdEventId = eventService.createEvent(user_id, eventCreateDto);
 
         Map<String, Long> response = new HashMap<>();
         response.put("event_id", createdEventId);

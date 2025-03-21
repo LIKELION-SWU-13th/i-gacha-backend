@@ -26,12 +26,14 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public EventGetDto createEvent(Long userId, EventDto eventCreateDto) {
+    public Long createEvent(Long userId, EventDto eventCreateDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
         Event event = new Event(user, eventCreateDto.getName());
         Event savedEvent = eventRepository.save(event);
-        return new EventGetDto(savedEvent.getId(), savedEvent.getName());
+
+        return savedEvent.getId();
     }
 
     public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
