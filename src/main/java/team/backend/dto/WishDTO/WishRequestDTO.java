@@ -12,5 +12,4 @@ public class WishRequestDTO {
         @NotBlank
         String link;
     }
-
 }
