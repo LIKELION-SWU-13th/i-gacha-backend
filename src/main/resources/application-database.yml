@@ -9,7 +9,13 @@ spring:
     hikari:
       maximum-pool-size: 20
       minimum-idle: 10
+
+webdriver:
+  chrome:
+    path: D:\chromedriver\chromedriver.exe
+
 ---
+
 spring:
   config:
     activate:
@@ -22,4 +28,7 @@ spring:
     hikari:
       maximum-pool-size: 20
       minimum-idle: 10
----
+
+webdriver:
+  chrome:
+    path: /usr/bin/chromedriver

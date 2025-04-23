@@ -11,6 +11,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import team.backend.apiPayload.code.status.ErrorStatus;
 import team.backend.apiPayload.exception.handler.EventHandler;
@@ -30,6 +31,9 @@ public class WishCommandServiceImpl implements WishCommandService {
 
     private final WishRepository wishRepository;
     private final EventRepository eventRepository;
+
+    @Value("${webdriver.chrome.path}")
+    private String chromeDriverPath;
 
     // 위시 생성
     @Override
@@ -120,7 +124,7 @@ public class WishCommandServiceImpl implements WishCommandService {
         Map<String, String> productData = new HashMap<>();
 
         try {
-            WebDriverManager.chromedriver().setup();
+            System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
             ChromeOptions options = new ChromeOptions();
             options.setBinary("/usr/bin/chromium-browser");
