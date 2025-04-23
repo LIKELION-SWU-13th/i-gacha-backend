@@ -123,6 +123,7 @@ public class WishCommandServiceImpl implements WishCommandService {
             WebDriverManager.chromedriver().setup();
 
             ChromeOptions options = new ChromeOptions();
+            options.setBinary("/usr/bin/chromium-browser");
             options.addArguments("--headless");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
