@@ -17,8 +17,6 @@ import team.backend.service.UserService;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-
-
     @Autowired
     private UserService userService;
     @Value("${frontend.domain}")  // application.yml에서 정의한 URL 값 읽기
