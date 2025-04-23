@@ -2,7 +2,9 @@ package team.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import team.backend.dto.EventDto;
+import team.backend.dto.EventDto.EventDto;
+import team.backend.dto.EventDto.EventCreateDto;
+import team.backend.dto.EventDto.EventGetDto;
 import team.backend.domain.Event;
 import team.backend.repository.UserRepository;
 import team.backend.repository.EventRepository;
@@ -25,13 +27,33 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public EventDto createEvent(Long userId, EventDto eventDto) {
+    public EventCreateDto createEvent(Long userId, EventDto eventDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = new Event(user, eventDto.getName());
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        Event event = new Event(user, eventDto.getName());  // eventDto.getName() 사용
         Event savedEvent = eventRepository.save(event);
-        return new EventDto(savedEvent.getUser().getId(), savedEvent.getName());
+
+        return new EventCreateDto(savedEvent.getId());  // EventCreateDto로 응답 반환
     }
+
+
+    public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new IllegalArgumentException("Event not found with id: " + eventId));
+
+        // 해당 이벤트가 userId의 소유자인지 검증
+        if (!event.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("User does not have permission to update this event");
+        }
+
+        event.setName(eventDto.getName());
+        eventRepository.save(event);
+
+        return new EventDto(event.getName());
+
+    }
+
 
     public void deleteEvent(Long userId, Long eventId) {
         User user = userRepository.findById(userId)
@@ -41,24 +63,14 @@ public class EventService {
         eventRepository.delete(event);
     }
 
-    public EventDto updateEvent(Long userId, Long eventId, EventDto eventDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
-        Event event = eventRepository.findByUserAndId(user, eventId)
-                .orElseThrow(() -> new EventNotFoundException("Event not found"));
-        event.setName(eventDto.getName());
-        Event updatedEvent = eventRepository.save(event);
-        return new EventDto(updatedEvent.getUser().getId(), updatedEvent.getName());
-    }
 
-    public List<EventDto> getAllEvents(Long userId) {
+    public List<EventGetDto> getAllEvents(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
 
         return eventRepository.findAllByUser(user).stream()
-                .map(event -> new EventDto(
-                        event.getUser().getId(),
-                        event.getName()
+                .map(event -> new EventGetDto(
+                        event.getId(), event.getName()
                 ))
                 .collect(Collectors.toList());
     }
