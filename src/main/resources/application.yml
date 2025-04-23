@@ -27,4 +27,4 @@ spring:
       - local
 
 frontend:
-  domain:
+  domain: ${FRONT_DOMAIN}
