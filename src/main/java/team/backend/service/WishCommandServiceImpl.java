@@ -122,12 +122,13 @@ public class WishCommandServiceImpl implements WishCommandService {
         try {
             WebDriverManager.chromedriver().setup();
 
-            // 👉 여기 수정
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless");
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--disable-gpu");
+            options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
+
 
             WebDriver driver = new ChromeDriver(options);
 
