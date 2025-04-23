@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -113,35 +114,37 @@ public class WishCommandServiceImpl implements WishCommandService {
     }
 
     // 크롤링 코드
+    // 크롤링 코드
     @Transactional
     public Map<String, String> fetchWishData(String url){
         Map<String, String> productData = new HashMap<>();
 
         try {
-            // WebDriver 설정
             WebDriverManager.chromedriver().setup();
-            WebDriver driver = new ChromeDriver();
+
+            // 👉 여기 수정
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+
+            WebDriver driver = new ChromeDriver(options);
 
             driver.get(url);
-
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
-            // 상품 제목 가져오기
             WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.prod-buy-header__title")));
             String title = titleElement.getText();
             productData.put("title", title);
 
-            // 상품 이미지 가져오기
             WebElement imageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.prod-image__detail")));
             String imageUrl = imageElement.getAttribute("src");
 
-            // 고해상도 이미지 URL로 변경
             String highResImageUrl = imageElement.getAttribute("data-zoom-image-url");
             if (highResImageUrl != null && !highResImageUrl.isEmpty()) {
                 imageUrl = highResImageUrl;
             }
-
-            // src 속성이 //로 시작하면 https 추가
             if (imageUrl.startsWith("//")) {
                 imageUrl = "https:" + imageUrl;
             }
@@ -155,4 +158,5 @@ public class WishCommandServiceImpl implements WishCommandService {
 
         return productData;
     }
+
 }
