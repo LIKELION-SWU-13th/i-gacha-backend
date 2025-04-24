@@ -12,7 +12,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import team.backend.apiPayload.code.status.ErrorStatus;
 import team.backend.apiPayload.exception.handler.EventHandler;
 import team.backend.domain.Event;
@@ -117,52 +122,34 @@ public class WishCommandServiceImpl implements WishCommandService {
         }
     }
 
-    // 크롤링 코드
-    // 크롤링 코드
-    @Transactional
-    public Map<String, String> fetchWishData(String url){
-        Map<String, String> productData = new HashMap<>();
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    // 크롤링 서버 주소
+    @Value("${crawling.server.url}")
+    private String crawlingServerUrl;
+
+    public Map<String, String> fetchWishData(String url) {
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("url", url);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         try {
-            System.setProperty("webdriver.chrome.driver", chromeDriverPath);
-
-            ChromeOptions options = new ChromeOptions();
-            options.setBinary("/usr/bin/chromium-browser");
-            options.addArguments("--headless");
-            options.addArguments("--no-sandbox");
-            options.addArguments("--disable-dev-shm-usage");
-            options.addArguments("--disable-gpu");
-            options.addArguments("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36");
-
-
-            WebDriver driver = new ChromeDriver(options);
-
-            driver.get(url);
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-            WebElement titleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.prod-buy-header__title")));
-            String title = titleElement.getText();
-            productData.put("title", title);
-
-            WebElement imageElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.prod-image__detail")));
-            String imageUrl = imageElement.getAttribute("src");
-
-            String highResImageUrl = imageElement.getAttribute("data-zoom-image-url");
-            if (highResImageUrl != null && !highResImageUrl.isEmpty()) {
-                imageUrl = highResImageUrl;
-            }
-            if (imageUrl.startsWith("//")) {
-                imageUrl = "https:" + imageUrl;
-            }
-
-            productData.put("image", imageUrl);
-
-            driver.quit();
+            ResponseEntity<Map> response = restTemplate.postForEntity(
+                    crawlingServerUrl + "/crawl",
+                    entity,
+                    Map.class
+            );
+            return response.getBody();
         } catch (Exception e) {
-            productData.put("error", e.getMessage());
+            Map<String, String> fallback = new HashMap<>();
+            fallback.put("title", "크롤링 실패");
+            fallback.put("image", "https://via.placeholder.com/300");
+            fallback.put("error", e.getMessage());
+            return fallback;
         }
-
-        return productData;
     }
 
 }

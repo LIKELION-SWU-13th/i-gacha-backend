@@ -28,3 +28,7 @@ spring:
 
 frontend:
   domain: ${FRONT_DOMAIN}
+
+crawling:
+  server:
+    url: http://13.209.244.254:8080
