@@ -12,4 +12,5 @@ public interface WishCommandService {
     Wish updateWish(Long userId, Long eventId, Long wishId, WishRequestDTO.CreateRqDTO request);
     void checkEvent(Long userId, Long eventId);
     Map<String, String> fetchWishData(String url);
+    void validateUrlFormat(String url);
 }

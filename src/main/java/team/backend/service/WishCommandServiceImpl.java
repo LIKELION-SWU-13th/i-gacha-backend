@@ -44,6 +44,7 @@ public class WishCommandServiceImpl implements WishCommandService {
     @Override
     @Transactional
     public Wish joinEvent(Long userId, Long eventId, WishRequestDTO.CreateRqDTO request){
+        validateUrlFormat(request.getLink());
         // 해당 사용자가 만든 이벤트가 맞는지 검사
         boolean isChecked = eventRepository.isUserCreator(userId, eventId);
         if (!isChecked) {
@@ -73,6 +74,7 @@ public class WishCommandServiceImpl implements WishCommandService {
     @Override
     @Transactional
     public Wish updateWish(Long userId, Long eventId, Long wishId, WishRequestDTO.CreateRqDTO request){
+        validateUrlFormat(request.getLink());
         // USER > EVENT > WISH 검사
         int isChecked = eventRepository.existsWishForUser(userId, eventId, wishId);
         if (isChecked != 1) {
@@ -154,8 +156,14 @@ public class WishCommandServiceImpl implements WishCommandService {
             return result;
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+        }
+    }
+
+    @Override
+    public void validateUrlFormat(String url) {
+        if (!url.matches("^https://www\\.coupang\\.com/vp/products/\\d+.*$")) {
+            throw new EventHandler(ErrorStatus._INVALID_URL_FORMAT);
         }
     }
 

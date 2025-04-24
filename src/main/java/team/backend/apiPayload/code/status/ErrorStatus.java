@@ -26,6 +26,8 @@ public enum ErrorStatus implements BaseErrorCode {
     _LINK_ERROR(HttpStatus.BAD_REQUEST, "LINK401", "올바른 link를 던져주세요"),
 
     _CRAWLING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "CRAW400", "크롤링 에러"),
+
+    _INVALID_URL_FORMAT(HttpStatus.BAD_REQUEST, "URL400", "링크 형식이 잘못되었습니다. 올바른 링크를 추가했는지 확인해 주세요.")
     ;
 
     private final HttpStatus httpStatus;
