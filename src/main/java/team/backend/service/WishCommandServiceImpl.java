@@ -142,8 +142,19 @@ public class WishCommandServiceImpl implements WishCommandService {
                     entity,
                     Map.class
             );
-            return response.getBody();
+
+            Map<String, String> result = response.getBody();
+
+            if (result == null
+                    || result.get("title") == null
+                    || result.get("image") == null ){
+                throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+            }
+
+            return result;
+
         } catch (Exception e) {
+            e.printStackTrace();
             throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
         }
     }

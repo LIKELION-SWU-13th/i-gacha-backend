@@ -55,7 +55,6 @@ public class EventController {
 
         EventDto updatedEvent = eventService.updateEvent(user_id, event_id, eventDto);
         return ResponseEntity.ok(updatedEvent);
-        //zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
     }
 }
 

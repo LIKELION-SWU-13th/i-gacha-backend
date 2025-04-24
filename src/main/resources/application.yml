@@ -31,4 +31,4 @@ frontend:
 
 crawling:
   server:
-    url: http://13.209.244.254:8080
+    url: ${CRAWLING_SERVER}
