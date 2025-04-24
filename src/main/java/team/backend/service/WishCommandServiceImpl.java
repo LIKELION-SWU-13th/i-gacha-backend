@@ -1,5 +1,8 @@
 package team.backend.service;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,6 +29,7 @@ import team.backend.dto.WishDTO.WishRequestDTO;
 import team.backend.repository.EventRepository;
 import team.backend.repository.WishRepository;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +41,13 @@ public class WishCommandServiceImpl implements WishCommandService {
     private final WishRepository wishRepository;
     private final EventRepository eventRepository;
 
+    // 웹 드라이버 주소
     @Value("${webdriver.chrome.path}")
     private String chromeDriverPath;
+
+    // 크롤링 서버 주소
+    @Value("${crawling.server.url}")
+    private String crawlingServerUrl;
 
     // 위시 생성
     @Override
@@ -126,10 +135,8 @@ public class WishCommandServiceImpl implements WishCommandService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // 크롤링 서버 주소
-    @Value("${crawling.server.url}")
-    private String crawlingServerUrl;
-
+    //크롤링 코드
+    @Override
     public Map<String, String> fetchWishData(String url) {
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("url", url);
