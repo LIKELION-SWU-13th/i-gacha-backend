@@ -23,8 +23,9 @@ public enum ErrorStatus implements BaseErrorCode {
 
     _WISH_NOT_FOUND(HttpStatus.BAD_REQUEST, "WISH401", "해당 wish 상품은 존재하지 않습니다."),
 
-    _LINK_ERROR(HttpStatus.BAD_REQUEST, "LINK401", "올바른 link를 던져주세요")
+    _LINK_ERROR(HttpStatus.BAD_REQUEST, "LINK401", "올바른 link를 던져주세요"),
 
+    _CRAWLING_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "CRAW400", "올바른 link를 던져주세요"),
     ;
 
     private final HttpStatus httpStatus;

@@ -144,11 +144,7 @@ public class WishCommandServiceImpl implements WishCommandService {
             );
             return response.getBody();
         } catch (Exception e) {
-            Map<String, String> fallback = new HashMap<>();
-            fallback.put("title", "크롤링 실패");
-            fallback.put("image", "https://via.placeholder.com/300");
-            fallback.put("error", e.getMessage());
-            return fallback;
+            throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
         }
     }
 
