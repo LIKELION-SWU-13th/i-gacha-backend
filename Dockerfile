@@ -6,8 +6,9 @@ RUN apt-get update && \
     libcups2 libxcomposite1 libxrandr2 libxdamage1 \
     libxext6 libxfixes3 libx11-xcb1 libx11-6 \
     libpangocairo-1.0-0 libgtk-3-0 libxshmfence1 \
-    libgbm1 libxrender1 && \
+    libgbm1 libxrender1 libasound2-plugins && \
     rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 
