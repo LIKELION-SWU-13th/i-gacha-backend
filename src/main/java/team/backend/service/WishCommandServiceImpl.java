@@ -162,15 +162,13 @@ public class WishCommandServiceImpl implements WishCommandService {
             if (result == null
                     || result.get("title") == null
                     || result.get("image") == null ){
-                return fallbackWithPlaywright(url);
-                //throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+                throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
             }
 
             return result;
 
         } catch (Exception e) {
-            //throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
-            return fallbackWithPlaywright(url);
+            throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
         }
     }
 
@@ -180,39 +178,39 @@ public class WishCommandServiceImpl implements WishCommandService {
             throw new EventHandler(ErrorStatus._INVALID_URL_FORMAT);
         }
     }
-
-    public Map<String, String> fallbackWithPlaywright(String url) {
-        Map<String, String> result = new HashMap<>();
-
-        try (Playwright playwright = Playwright.create()) {
-            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-
-            Page page = browser.newPage(new Browser.NewPageOptions()
-                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-            );
-
-            page.navigate(url, new Page.NavigateOptions()
-                    .setTimeout(60000)
-                    .setWaitUntil(WaitUntilState.DOMCONTENTLOADED)
-            );
-
-            String title = page.locator("meta[property='og:title']").getAttribute("content");
-
-            if (title == null) {
-                title = page.title(); // 대체용
-            }
-
-            result.put("title", title);
-            result.put("image", ""); // 이미지 없이
-
-        } catch (Exception e) {
-            System.err.println("Playwright fallback error: " + e.getMessage());
-            result.put("title", null);
-            result.put("image", "");
-        }
-
-        return result;
-    }
+    //playwright 코드
+//    public Map<String, String> fallbackWithPlaywright(String url) {
+//        Map<String, String> result = new HashMap<>();
+//
+//        try (Playwright playwright = Playwright.create()) {
+//            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+//
+//            Page page = browser.newPage(new Browser.NewPageOptions()
+//                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+//            );
+//
+//            page.navigate(url, new Page.NavigateOptions()
+//                    .setTimeout(60000)
+//                    .setWaitUntil(WaitUntilState.DOMCONTENTLOADED)
+//            );
+//
+//            String title = page.locator("meta[property='og:title']").getAttribute("content");
+//
+//            if (title == null) {
+//                title = page.title(); // 대체용
+//            }
+//
+//            result.put("title", title);
+//            result.put("image", ""); // 이미지 없이
+//
+//        } catch (Exception e) {
+//            System.err.println("Playwright fallback error: " + e.getMessage());
+//            result.put("title", null);
+//            result.put("image", "");
+//        }
+//
+//        return result;
+//    }
 
 
 }
