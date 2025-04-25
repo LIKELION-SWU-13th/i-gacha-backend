@@ -4,6 +4,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.WaitUntilState;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -185,10 +186,16 @@ public class WishCommandServiceImpl implements WishCommandService {
 
         try (Playwright playwright = Playwright.create()) {
             Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-            Page page = browser.newPage();
-            page.navigate(url, new Page.NavigateOptions().setTimeout(60000));
 
-            // og:title에서 상품명 추출
+            Page page = browser.newPage(new Browser.NewPageOptions()
+                    .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            );
+
+            page.navigate(url, new Page.NavigateOptions()
+                    .setTimeout(60000)
+                    .setWaitUntil(WaitUntilState.DOMCONTENTLOADED)
+            );
+
             String title = page.locator("meta[property='og:title']").getAttribute("content");
 
             if (title == null) {
@@ -196,15 +203,16 @@ public class WishCommandServiceImpl implements WishCommandService {
             }
 
             result.put("title", title);
-            result.put("image", ""); // 이미지 없이 빈 값 세팅
+            result.put("image", ""); // 이미지 없이
 
         } catch (Exception e) {
             System.err.println("Playwright fallback error: " + e.getMessage());
-            result.put("title", null); // 최악의 경우 null 반환
+            result.put("title", null);
             result.put("image", "");
         }
 
         return result;
     }
+
 
 }
