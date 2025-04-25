@@ -55,6 +55,9 @@ dependencies {
 
 	// WebDriverManager (드라이버 자동 다운로드)
 	implementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
+
+	//playwright
+	implementation 'com.microsoft.playwright:playwright:1.44.0'
 }
 
 tasks.named('test') {

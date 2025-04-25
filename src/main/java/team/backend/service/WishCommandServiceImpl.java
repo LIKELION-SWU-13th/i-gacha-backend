@@ -1,5 +1,9 @@
 package team.backend.service;
 
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -157,13 +161,15 @@ public class WishCommandServiceImpl implements WishCommandService {
             if (result == null
                     || result.get("title") == null
                     || result.get("image") == null ){
-                throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+                return fallbackWithPlaywright(url);
+                //throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
             }
 
             return result;
 
         } catch (Exception e) {
-            throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+            //throw new EventHandler(ErrorStatus._CRAWLING_ERROR);
+            return fallbackWithPlaywright(url);
         }
     }
 
@@ -172,6 +178,33 @@ public class WishCommandServiceImpl implements WishCommandService {
         if (!url.matches("^https://www\\.coupang\\.com/vp/products/\\d+.*$")) {
             throw new EventHandler(ErrorStatus._INVALID_URL_FORMAT);
         }
+    }
+
+    public Map<String, String> fallbackWithPlaywright(String url) {
+        Map<String, String> result = new HashMap<>();
+
+        try (Playwright playwright = Playwright.create()) {
+            Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+            Page page = browser.newPage();
+            page.navigate(url, new Page.NavigateOptions().setTimeout(60000));
+
+            // og:title에서 상품명 추출
+            String title = page.locator("meta[property='og:title']").getAttribute("content");
+
+            if (title == null) {
+                title = page.title(); // 대체용
+            }
+
+            result.put("title", title);
+            result.put("image", ""); // 이미지 없이 빈 값 세팅
+
+        } catch (Exception e) {
+            System.err.println("Playwright fallback error: " + e.getMessage());
+            result.put("title", null); // 최악의 경우 null 반환
+            result.put("image", "");
+        }
+
+        return result;
     }
 
 }
