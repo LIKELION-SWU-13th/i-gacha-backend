@@ -9,12 +9,14 @@ RUN apt-get update && \
     libgbm1 libxrender1 && \
     rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /app
 
 COPY . .
 
+RUN chmod +x gradlew
+
 RUN ./gradlew playwright-cli --args="install"
+
 RUN ./gradlew build -x test
 
 CMD ["java", "-jar", "build/libs/backend-0.0.1-SNAPSHOT.jar"]
