@@ -4,10 +4,11 @@ RUN apt-get update && \
     apt-get install -y wget gnupg2 curl unzip \
     libglib2.0-0 libnss3 libatk1.0-0 libatk-bridge2.0-0 \
     libcups2 libxcomposite1 libxrandr2 libxdamage1 \
-    libxext6 libxfixes3 libx11-xcb1 libx11-6 libasound2 \
+    libxext6 libxfixes3 libx11-xcb1 libx11-6 \
     libpangocairo-1.0-0 libgtk-3-0 libxshmfence1 \
     libgbm1 libxrender1 && \
     rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /app
 
